@@ -4,25 +4,36 @@
       <CardGIF :gif="gif" />
     </div>
   </div>
-  <v-btn v-show="storedGifs.length > 0">Show more</v-btn>
+  <v-btn
+    v-show="storedGifs.length > 0"
+    :loading="loadingNewData"
+    @click="getData"
+    >Show more</v-btn
+  >
 </template>
 
 <script setup lang="ts">
 import Api from "@/api/Api";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from "@/store";
 import CardGIF from "@/components/CardGIF.vue";
 
 const store = useStore();
+const loadingNewData = ref(false);
 
 const getData = () => {
-  Api.getTrendingGifs()
+  const currentPosition = store.state.lastPosition;
+  loadingNewData.value = true;
+  Api.getTrendingGifs(currentPosition)
     .then((res) => {
-      store.commit("storeData", res.data.results);
+      store.commit("storeData", res.data);
       console.log(res);
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      loadingNewData.value = false;
     });
 };
 
