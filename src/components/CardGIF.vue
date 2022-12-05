@@ -6,7 +6,16 @@
       @mouseover="onMouseOver"
       @mouseleave="onMouseLeave"
       :alt="gif.content_description"
-    />
+    >
+      <template v-slot:placeholder>
+        <v-row class="fill-height ma-0" align="center" justify="center">
+          <v-progress-circular
+            indeterminate
+            color="grey lighten-5"
+          ></v-progress-circular>
+        </v-row>
+      </template>
+    </v-img>
     <v-card-actions class="d-flex justify-space-between pa-4" id="div-actions">
       <v-btn
         height="35"
