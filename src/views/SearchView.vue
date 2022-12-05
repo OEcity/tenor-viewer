@@ -28,6 +28,8 @@ const searchString = ref("");
 const store = useStore();
 const loadingNewData = ref(false);
 const getData = (triggeredFromButton: boolean) => {
+  if (searchString.value.length === 0) return;
+
   const currentPosition = triggeredFromButton
     ? store.state.search.lastPosition
     : undefined;

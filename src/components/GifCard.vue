@@ -1,12 +1,10 @@
 <template>
-  <v-card @click="openGIFLink">
-    <v-img
-      width="235"
-      :src="imgSrc"
-      @mouseover="onMouseOver"
-      @mouseleave="onMouseLeave"
-      :alt="gif.content_description"
-    >
+  <v-card
+    @click="openGIFLink"
+    @mouseover="onMouseOver"
+    @mouseleave="onMouseLeave"
+  >
+    <v-img width="235" :src="imgSrc" :alt="gif.content_description">
       <template v-slot:placeholder>
         <v-row class="fill-height ma-0" align="center" justify="center">
           <v-progress-circular
@@ -48,16 +46,23 @@ const openGIFLink = () => {
 
 const mouseHovered = ref(false);
 
-const onMouseOver = () => {
-  mouseHovered.value = true;
-};
-
 const copyLinkToClipboard = () => {
   navigator.clipboard.writeText(props.gif!.media_formats.gif.url);
 };
 
+const interval = ref<ReturnType<typeof setTimeout>>();
+const onMouseOver = () => {
+  if (interval.value != undefined) {
+    clearTimeout(interval.value);
+  }
+  mouseHovered.value = true;
+};
+
 const onMouseLeave = () => {
-  setTimeout(() => {
+  if (interval.value != undefined) {
+    clearTimeout(interval.value);
+  }
+  interval.value = setTimeout(() => {
     mouseHovered.value = false;
   }, 2500);
 };
