@@ -1,30 +1,19 @@
 import { createStore, Store, useStore as baseUseStore } from "vuex";
 import type { InjectionKey } from "vue";
-import type { GIFObject } from "@/store/types/GIFObject";
+import { StoreModuleTrending } from "@/store/modules/StoreModuleTrending";
+import type { StoreModule } from "@/store/types/StoreModule";
+import { StoreModuleSearch } from "@/store/modules/StoreModuleSearch";
 
 export interface State {
-  gifs: GIFObject[];
-  lastPosition?: string;
+  trending: StoreModule;
+  search: StoreModule;
 }
 export const key: InjectionKey<Store<State>> = Symbol();
 
 export const store = createStore<State>({
-  state() {
-    return {
-      gifs: [],
-      lastPosition: undefined,
-    };
-  },
-  mutations: {
-    storeData(state, { results, next }) {
-      if (state.lastPosition == undefined) {
-        state.gifs = results;
-      } else {
-        state.gifs = [...state.gifs, ...results];
-      }
-
-      state.lastPosition = next;
-    },
+  modules: {
+    trending: StoreModuleTrending,
+    search: StoreModuleSearch,
   },
 });
 

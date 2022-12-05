@@ -1,9 +1,5 @@
 <template>
-  <div class="container">
-    <div v-for="gif in storedGifs" :key="gif.id" class="pa-1">
-      <CardGIF :gif="gif" />
-    </div>
-  </div>
+  <GifGrid :gif-array="storedGifs" />
   <v-btn
     v-show="storedGifs.length > 0"
     :loading="loadingNewData"
@@ -14,19 +10,19 @@
 
 <script setup lang="ts">
 import Api from "@/api/Api";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useStore } from "@/store";
-import CardGIF from "@/components/CardGIF.vue";
+import GifGrid from "@/components/GifGrid.vue";
 
 const store = useStore();
 const loadingNewData = ref(false);
 
 const getData = () => {
-  const currentPosition = store.state.lastPosition;
+  const currentPosition = store.state.trending.lastPosition;
   loadingNewData.value = true;
   Api.getTrendingGifs(currentPosition)
     .then((res) => {
-      store.commit("storeData", res.data);
+      store.commit("trending/storeData", res.data);
       console.log(res);
     })
     .catch((err) => {
@@ -37,19 +33,15 @@ const getData = () => {
     });
 };
 
-const storedGifs = computed(() => store.state.gifs);
+const storedGifs = computed(() => store.state.trending.gifs);
 
 onMounted(() => {
   getData();
 });
+
+onUnmounted(() => {
+  store.commit("trending/clearData");
+});
 </script>
 
-<style scoped>
-.container {
-  list-style: none;
-  column-gap: 0;
-  padding: 0;
-  column-count: 5;
-  column-width: 235px;
-}
-</style>
+<style scoped></style>
