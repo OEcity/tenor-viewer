@@ -33,6 +33,8 @@ const searchString = ref("");
 
 const store = useStore();
 const loadingNewData = ref(false);
+const storedGifs = computed(() => store.state.search.gifs);
+const categories = computed(() => store.state.favourites.categories);
 
 const showLoading = computed(
   () => loadingNewData.value === true && storedGifs.value.length === 0
@@ -63,21 +65,15 @@ const getData = (triggeredFromButton: boolean) => {
 };
 
 const interval = ref<ReturnType<typeof setTimeout>>();
-
-const storedGifs = computed(() => store.state.search.gifs);
-const categories = computed(() => store.state.favourites.categories);
-
 const triggerSearch = (inputString: string) => {
   searchString.value = inputString;
   if (inputString.length === 0) {
     store.commit("search/clearData");
     return;
   }
-
   if (interval.value != null) {
     clearTimeout(interval.value);
   }
-
   interval.value = setTimeout(() => {
     getData(false);
   }, 200);

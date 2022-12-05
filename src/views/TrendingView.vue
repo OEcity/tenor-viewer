@@ -16,6 +16,8 @@ import GifGrid from "@/components/GifGrid.vue";
 
 const store = useStore();
 const loadingNewData = ref(false);
+const storedGifs = computed(() => store.state.trending.gifs);
+
 const showLoading = computed(
   () => loadingNewData.value === true && storedGifs.value.length === 0
 );
@@ -35,8 +37,6 @@ const getData = () => {
       loadingNewData.value = false;
     });
 };
-
-const storedGifs = computed(() => store.state.trending.gifs);
 
 onMounted(() => {
   getData();

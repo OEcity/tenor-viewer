@@ -88,6 +88,7 @@ const toggleFavourite = () => {
 const favouriteGIFsIds = computed(() =>
   store.state.favourites.gifs.map((gif) => gif.id)
 );
+
 const heartColor = computed(() =>
   favouriteGIFsIds.value.includes(props.gif!.id) ? "red" : null
 );

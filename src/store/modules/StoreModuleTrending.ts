@@ -21,6 +21,7 @@ export const StoreModuleTrending: Module<any, any> = {
     },
     clearData(state) {
       state.gifs = [];
+      state.lastPosition = undefined;
     },
   },
 };
