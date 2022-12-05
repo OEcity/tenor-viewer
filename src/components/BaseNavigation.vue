@@ -7,7 +7,7 @@
       <v-btn class="mb-2" icon size="40" to="/search">
         <v-icon icon="mdi-magnify" size="20" />
       </v-btn>
-      <v-btn icon size="40">
+      <v-btn icon size="40" to="/favourites">
         <v-icon icon="mdi-heart" size="20" />
       </v-btn>
     </div>

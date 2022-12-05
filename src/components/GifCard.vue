@@ -24,8 +24,14 @@
       >
         <v-icon size="19" icon="mdi-content-copy" />
       </v-btn>
-      <v-btn height="30" width="30" icon elevation="2">
-        <v-icon size="19" icon="mdi-heart" />
+      <v-btn
+        height="30"
+        width="30"
+        icon
+        elevation="2"
+        @click.stop="toggleFavourite"
+      >
+        <v-icon size="19" icon="mdi-heart" :color="heartColor" />
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -35,21 +41,17 @@
 import type { PropType } from "vue";
 import type { GIFObject } from "@/store/types/GIFObject";
 import { computed, ref } from "vue";
+import { useStore } from "@/store";
 
 const props = defineProps({
   gif: Object as PropType<GIFObject>,
 });
 
-const openGIFLink = () => {
-  window.open(props.gif!.itemurl, "_blank");
-};
-
-const mouseHovered = ref(false);
-
 const copyLinkToClipboard = () => {
   navigator.clipboard.writeText(props.gif!.media_formats.gif.url);
 };
 
+const mouseHovered = ref(false);
 const interval = ref<ReturnType<typeof setTimeout>>();
 const onMouseOver = () => {
   if (interval.value != undefined) {
@@ -73,6 +75,22 @@ const imgSrc = computed(() => {
     ? props.gif.media_formats.gif.url
     : props.gif.media_formats.gifpreview.url;
 });
+
+const openGIFLink = () => {
+  window.open(props.gif!.itemurl, "_blank");
+};
+
+const store = useStore();
+const toggleFavourite = () => {
+  store.commit("favourites/toggleFavouriteGif", props.gif);
+};
+
+const favouriteGIFsIds = computed(() =>
+  store.state.favourites.gifs.map((gif) => gif.id)
+);
+const heartColor = computed(() =>
+  favouriteGIFsIds.value.includes(props.gif!.id) ? "red" : null
+);
 </script>
 
 <style scoped>

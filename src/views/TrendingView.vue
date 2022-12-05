@@ -1,5 +1,5 @@
 <template>
-  <GifGrid :gif-array="storedGifs" />
+  <GifGrid :gif-array="storedGifs" :loading="showLoading" />
   <v-btn
     v-show="storedGifs.length > 0"
     :loading="loadingNewData"
@@ -16,6 +16,9 @@ import GifGrid from "@/components/GifGrid.vue";
 
 const store = useStore();
 const loadingNewData = ref(false);
+const showLoading = computed(
+  () => loadingNewData.value === true && storedGifs.value.length === 0
+);
 
 const getData = () => {
   const currentPosition = store.state.trending.lastPosition;

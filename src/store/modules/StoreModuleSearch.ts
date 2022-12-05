@@ -20,6 +20,7 @@ export const StoreModuleSearch: Module<any, any> = {
     },
     clearData(state) {
       state.gifs = [];
+      state.lastPosition = undefined;
     },
   },
 };

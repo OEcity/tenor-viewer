@@ -7,7 +7,12 @@
       placeholder="Vyhledat"
       prepend-inner-icon="mdi-magnify"
     />
-    <GifGrid :gif-array="storedGifs" />
+    <CategoriesGrid
+      v-show="searchString.length === 0"
+      :categories="categories"
+      @onCategoryClick="triggerSearch"
+    />
+    <GifGrid :loading="showLoading" :gif-array="storedGifs" />
     <v-btn
       v-show="storedGifs.length > 0"
       :loading="loadingNewData"
@@ -23,10 +28,16 @@ import Api from "@/api/Api";
 import { computed, onUnmounted, ref } from "vue";
 import GifGrid from "@/components/GifGrid.vue";
 import { useStore } from "@/store";
+import CategoriesGrid from "@/components/CategoriesGrid.vue";
 const searchString = ref("");
 
 const store = useStore();
 const loadingNewData = ref(false);
+
+const showLoading = computed(
+  () => loadingNewData.value === true && storedGifs.value.length === 0
+);
+
 const getData = (triggeredFromButton: boolean) => {
   if (searchString.value.length === 0) return;
 
@@ -54,9 +65,15 @@ const getData = (triggeredFromButton: boolean) => {
 const interval = ref<ReturnType<typeof setTimeout>>();
 
 const storedGifs = computed(() => store.state.search.gifs);
+const categories = computed(() => store.state.favourites.categories);
 
 const triggerSearch = (inputString: string) => {
   searchString.value = inputString;
+  if (inputString.length === 0) {
+    store.commit("search/clearData");
+    return;
+  }
+
   if (interval.value != null) {
     clearTimeout(interval.value);
   }
