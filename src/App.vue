@@ -5,7 +5,7 @@
   </v-app>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BaseNavigation from "@/components/BaseNavigation.vue";
 import { onMounted } from "vue";
 import Api from "@/api/Api";

@@ -4,7 +4,7 @@
     @mouseover="onMouseOver"
     @mouseleave="onMouseLeave"
   >
-    <v-img width="235" :src="imgSrc" :alt="gif.content_description">
+    <v-img width="235" :src="imgSrc" :alt="gif?.content_description">
       <template v-slot:placeholder>
         <v-row class="fill-height ma-0" align="center" justify="center">
           <v-progress-circular
@@ -90,7 +90,7 @@ const favouriteGIFsIds = computed(() =>
 );
 
 const heartColor = computed(() =>
-  favouriteGIFsIds.value.includes(props.gif!.id) ? "red" : null
+  favouriteGIFsIds.value.includes(props.gif!.id) ? "red" : undefined
 );
 </script>
 
